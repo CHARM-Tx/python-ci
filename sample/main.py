@@ -5,7 +5,7 @@ def add(first: int, second: int):
     return first + second
 
 
-def main(first: int, second: int):
+def main():
     print(add(3, 5))
 
 
