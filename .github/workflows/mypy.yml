@@ -22,7 +22,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: ./.github/workflows/prepare.yml
+      - uses: ./.github/workflows/prepare
       - name: Mypy
         run: |
           python -m mypy
