@@ -61,6 +61,11 @@ jobs:
             pip-${{ hashFiles('setup.cfg') }}
             pip-
 
+      - name: Log in to AWS CodeArtifact
+        run: |
+          aws codeartifact login --tool pip --repository charm-pypi --domain charm-pypi \
+          --domain-owner 455661021047 --region eu-west-1
+
       - name: Install package
         run: |
           python -m pip install .
