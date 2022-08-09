@@ -6,9 +6,7 @@ on:
       python_version:
         type: string
         default: 3.9
-  pull_request:
-    inputs:
-      python_version: 3.9
+  pull_request: {}
 
 jobs:
   build:
