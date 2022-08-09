@@ -1,0 +1,28 @@
+name: Python Type Checking
+
+on: workflow_call
+
+jobs:
+  python-type-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      matrix:
+        python-version:
+          - "3.9"
+
+    defaults:
+      run:
+        # Necessary for the mamba-org/provision-with-micromamba action
+        shell: bash --login -eo pipefail {0}
+
+    env:
+      LD_LIBRARY_PATH: /home/runner/micromamba/envs/bindgen/lib:$LD_LIBRARY_PATH
+      PIP_EXTRA_INDEX_URL: https://download.pytorch.org/whl/cpu
+
+    steps:
+      - uses: ./.github/workflows/prepare.yml
+
+      - name: Mypy
+        run: |
+          python -m mypy
