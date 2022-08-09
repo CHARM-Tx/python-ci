@@ -8,6 +8,6 @@ jobs:
     timeout-minutes: 2
     steps:
       - uses: actions/checkout@v2
-      - uses: .github/workflows/pytest
+      - uses: .github/actions/pytest
         with:
           python_version: '3.9'
