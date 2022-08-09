@@ -21,8 +21,8 @@ jobs:
       PIP_EXTRA_INDEX_URL: https://download.pytorch.org/whl/cpu
 
     steps:
+      - uses: actions/checkout@v2
       - uses: ./.github/workflows/prepare.yml
-
       - name: Mypy
         run: |
           python -m mypy

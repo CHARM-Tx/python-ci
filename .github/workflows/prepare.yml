@@ -21,8 +21,6 @@ jobs:
       PIP_EXTRA_INDEX_URL: https://download.pytorch.org/whl/cpu
 
     steps:
-      - uses: actions/checkout@v2
-
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
