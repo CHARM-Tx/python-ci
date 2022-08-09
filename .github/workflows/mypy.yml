@@ -1,6 +1,6 @@
 name: Python Type Checking
 
-on: workflow_call
+on: [workflow_call, pull_request]
 
 jobs:
   python-type-check:
