@@ -37,9 +37,9 @@ jobs:
       uses: actions/cache@v3
       with:
         path: "~/.cache/pip"
-        key: "pip-${{ hashFiles('requirements-test.txt') }}"
+        key: "pip-${{ hashFiles('setup.cfg') }}"
         restore-keys: |
-          pip-${{ hashFiles('requirements-test.txt') }}
+          pip-${{ hashFiles('setup.cfg') }}
           pip-
 
     - name: Install package
