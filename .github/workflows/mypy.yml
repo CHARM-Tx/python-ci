@@ -20,6 +20,11 @@ jobs:
       LD_LIBRARY_PATH: /home/runner/micromamba/envs/bindgen/lib:$LD_LIBRARY_PATH
       PIP_EXTRA_INDEX_URL: https://download.pytorch.org/whl/cpu
 
+    # I don't love having all this workflow setup stuff inline in this file
+    # but the other options are:
+    # - make them their own .yml: they can't be used as steps within a job, only as entire jobs
+    # - make them an action: they can't do variable interpolation so you have to pass
+    # everything in as a parameter (laborious)
     steps:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
