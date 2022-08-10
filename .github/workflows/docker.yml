@@ -2,12 +2,9 @@ name: Publish docker image
 
 on:
   push:
-    branches:
-      - master
-      - main
-      - "*/build/docker/*"
     tags:
-      - "v*"
+    - 'v*'
+  pull_request: {}
 
 jobs:
   docker-publish:
@@ -38,8 +35,10 @@ jobs:
     - uses: ./.github/actions/publish-docker
       with:
         repository: 455661021047.dkr.ecr.eu-central-1.amazonaws.com/python-ci
+        publish_tags: "${{ github.ref == 'refs/heads/main' }}"
 
     - uses: ./.github/actions/publish-docker
       with:
         repository: 455661021047.dkr.ecr.eu-central-1.amazonaws.com/python-ci
         target: test
+        publish_tags: "${{ github.ref == 'refs/heads/main' }}"

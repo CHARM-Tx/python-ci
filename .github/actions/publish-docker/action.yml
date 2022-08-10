@@ -1,5 +1,5 @@
 name: "Set up repo"
-description: |
+description: >
   Build a docker image and push with a standardized set of tags - name, date,
   commit ref, and branch. Must be run after docker/setup-buildx-action@v2.
 inputs:
@@ -7,7 +7,7 @@ inputs:
     description: Repository to push to
     required: true
   target:
-    description: |
+    description: >
       The docker target to build, and suffix to add to tags. If `target` is
       `devel`, it will build the `devel` target from the dockerfile, and add
       the suffix `-devel` to all tags.
@@ -15,6 +15,11 @@ inputs:
   tag:
     description: Raw tag to use, e.g. `latest-gpu`.
     default: latest
+  publish_tags:
+    description: >
+      Whether to publish the image to name (see `tag`) and date tags, in
+      addition to `github-ref-` and `github-sha-` tags.
+    default: true
 runs:
   using: "composite"
   steps:
@@ -29,8 +34,8 @@ runs:
         tags: |
           type=ref,event=branch,prefix=github-ref-
           type=sha,format=long,prefix=github-sha-
-          type=raw,enable=${{ github.ref == 'refs/heads/master' }},value=${{ inputs.tag }}
-          type=raw,enable=${{ github.ref == 'refs/heads/master' }},value={{ date 'YYY-MM-DD' }}
+          type=raw,enable=${{ inputs.publish_tags }},value=${{ inputs.tag }}
+          type=raw,enable=${{ inputs.publish_tags }},value={{ date 'YYY-MM-DD' }}
 
     - name: Build & push image
       uses: docker/build-push-action@v3
