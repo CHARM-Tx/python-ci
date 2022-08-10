@@ -20,14 +20,9 @@ jobs:
 
     - uses: ./.github/actions/publish-docker
       with:
-        repository: example.com/foo
+        repository: 455661021047.dkr.ecr.eu-central-1.amazonaws.com/python-ci
 
     - uses: ./.github/actions/publish-docker
       with:
-        repository: example.com/foo
-        tag: latest-gpu
-
-    - uses: ./.github/actions/publish-docker
-      with:
-        repository: example.com/foo
-        target: devel
+        repository: 455661021047.dkr.ecr.eu-central-1.amazonaws.com/python-ci
+        target: test
