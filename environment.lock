@@ -1,0 +1,5 @@
+# This file may be used to create an environment using:
+# $ conda create --name <env> --file <this file>
+# platform: linux-64
+@EXPLICIT
+https://conda.anaconda.org/main/linux-64/pytz-2022.1-py39h06a4308_0.tar.bz2#4f78e6b22e43dcc597168917d225a733

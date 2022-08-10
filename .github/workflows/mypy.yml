@@ -1,0 +1,76 @@
+name: Python Type Checking
+
+on:
+  workflow_call:
+    secrets:
+      AWS_ACCESS_KEY_ID:
+        required: true
+      AWS_SECRET_ACCESS_KEY:
+        required: true
+      MLUTILS_DEPLOY_KEY:
+        required: true
+
+
+jobs:
+  python-mypy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    defaults:
+      run:
+        # Necessary for the mamba-org/provision-with-micromamba action
+        shell: bash --login -eo pipefail {0}
+
+    env:
+      LD_LIBRARY_PATH: /home/runner/micromamba/envs/bindgen/lib:$LD_LIBRARY_PATH
+      PIP_EXTRA_INDEX_URL: https://download.pytorch.org/whl/cpu
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-central-1
+
+      # Setup SSH keys to clone private repos
+      - name: Set up SSH agent
+        uses: webfactory/ssh-agent@v0.5.4
+        with:
+          ssh-private-key: |
+            ${{ secrets.MLUTILS_DEPLOY_KEY }}
+
+      # Configure conda
+      - name: Set up micromamba
+        uses: mamba-org/provision-with-micromamba@5fe88d370c741fc3567126d17c5af0b9620bd60d
+        with:
+          cache-downloads: true
+          cache-downloads-key: "mamba-${{ hashFiles('environment.lock') }}"
+          # to generate environment.lock run, see docker/update-reqs.sh
+          environment-file: environment.lock
+          environment-name: bindgen
+
+      - name: Cache pip downloads
+        uses: actions/cache@v3
+        with:
+          path: "~/.cache/pip"
+          key: "pip-${{ hashFiles('setup.cfg') }}"
+          restore-keys: |
+            pip-${{ hashFiles('setup.cfg') }}
+            pip-
+
+      - name: Log in to AWS CodeArtifact
+        run: |
+          aws codeartifact login --tool pip --repository charm-pypi --domain charm-pypi \
+          --domain-owner 455661021047 --region eu-west-1
+
+      - name: Install package
+        run: |
+          python -m pip install .[tests]
+
+      - name: Mypy
+        run: |
+          python -m mypy --install-types --non-interactive
+          python -m mypy
