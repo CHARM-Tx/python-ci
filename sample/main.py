@@ -1,5 +1,5 @@
 """A simple Python module to ensure the CI is working."""
-import requests # check dependencies are installed
+import requests  # check dependencies are installed
 
 
 def add(first: int, second: int):
