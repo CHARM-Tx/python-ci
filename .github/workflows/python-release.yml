@@ -15,10 +15,20 @@ on:
 jobs:
   lint:
     uses: ./.github/workflows/lint.yml
+
   mypy:
     uses: ./.github/workflows/mypy.yml
+    secrets:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      MLUTILS_DEPLOY_KEY: ${{ secrets.MLUTILS_DEPLOY_KEY }}
+
   test:
     uses: ./.github/workflows/test.yml
+    secrets:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      MLUTILS_DEPLOY_KEY: ${{ secrets.MLUTILS_DEPLOY_KEY }}
 
   deploy:
     runs-on: ubuntu-latest

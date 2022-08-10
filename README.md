@@ -15,6 +15,8 @@ Once you've done all that, you should be able to call these like you would any a
 
 `uses: CHARM-Tx/python-ci/workflows/lint.yml`
 
+See `python-release.yml` for an example of calling these workflows in a reusable way.
+
 ```conf
 [mypy]
 python_version = $your_version

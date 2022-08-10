@@ -1,6 +1,16 @@
 name: Python Type Checking
 
-on: [workflow_call, pull_request]
+on:
+  pull_request: {}
+  workflow_call:
+    secrets:
+      AWS_ACCESS_KEY_ID:
+        required: true
+      AWS_SECRET_ACCESS_KEY:
+        required: true
+      MLUTILS_DEPLOY_KEY:
+        required: true
+
 
 jobs:
   python-mypy:

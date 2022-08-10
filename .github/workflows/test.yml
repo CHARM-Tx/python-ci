@@ -1,12 +1,15 @@
 name: Unit Testing
 
 on:
-  workflow_call:
-    inputs:
-      python_version:
-        type: string
-        default: 3.9
   pull_request: {}
+  workflow_call:
+    secrets:
+      AWS_ACCESS_KEY_ID:
+        required: true
+      AWS_SECRET_ACCESS_KEY:
+        required: true
+      MLUTILS_DEPLOY_KEY:
+        required: true
 
 jobs:
   build:
@@ -31,7 +34,7 @@ jobs:
         environment-file: environment.lock
         environment-name: unit-testing
         extra-specs:
-          python=${{ inputs.python_version }}
+          python=3.9
 
     - name: Cache pip downloads
       uses: actions/cache@v3
