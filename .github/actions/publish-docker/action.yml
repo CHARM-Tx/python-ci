@@ -18,7 +18,7 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Build tags
+    - name: Generate tags
       id: tags
       uses: docker/metadata-action@v4
       with:
@@ -32,13 +32,13 @@ runs:
           type=raw,enable=${{ github.ref == 'refs/heads/master' }},value=${{ inputs.tag }}
           type=raw,enable=${{ github.ref == 'refs/heads/master' }},value={{ date 'YYY-MM-DD' }}
 
-    - name: Push devel
+    - name: Build & push image
       uses: docker/build-push-action@v3
       with:
         context: .
         file: ./docker/Dockerfile
         ssh: default
-        target: devel
+        target: ${{ inputs.target }}
         tags: ${{ steps.tags.outputs.tags }}
         push: true
         cache-from: type=gha
