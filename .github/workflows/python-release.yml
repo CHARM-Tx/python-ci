@@ -62,5 +62,5 @@ jobs:
       run: python -m build
 
     - name: Publish
-      if: github.event.push
+      if: startsWith(github.ref, 'refs/tags/v')
       run: twine upload dist/*
