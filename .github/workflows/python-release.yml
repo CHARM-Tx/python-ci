@@ -71,4 +71,4 @@ jobs:
 
     - name: Publish
       if: startsWith(github.ref, 'refs/tags/v')
-      run: twine upload dist/*
+      run: twine upload --repository codeartifact dist/*
