@@ -18,18 +18,17 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Build devel tags
-      id: devel_tags
+    - name: Build tags
+      id: tags
       uses: docker/metadata-action@v4
       with:
         images: ${{ inputs.repository }}
         flavor: |
           latest=false
-          suffix=${{ inputs.target && format('-{0}', inputs.target) }}
         tags: |
           type=ref,event=branch,prefix=github-ref-
           type=sha,format=long,prefix=github-sha-
-          type=raw,enable=${{ github.ref == 'refs/heads/master' }},value=${{ inputs.tag }}
+          type=raw,enable=${{ github.ref == 'refs/heads/master' }},value=latest-gpu
           type=raw,enable=${{ github.ref == 'refs/heads/master' }},value={{ date 'YYY-MM-DD' }}
 
 #    - name: Push devel
@@ -39,7 +38,7 @@ runs:
 #        file: ./docker/Dockerfile
 #        ssh: default
 #        target: devel
-#        tags: ${{ steps.devel_tags.outputs.tags }}
+#        tags: ${{ steps.tags.outputs.tags }}
 #        push: true
 #        cache-from: type=gha
 #        cache-to: type=gha,mode=max

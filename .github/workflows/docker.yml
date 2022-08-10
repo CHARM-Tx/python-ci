@@ -20,14 +20,14 @@ jobs:
 
     - uses: ./.github/actions/publish-docker
       with:
-        repository: foo
+        repository: example.com/foo
 
     - uses: ./.github/actions/publish-docker
       with:
-        repository: foo
-        tags: latest-gpu
+        repository: example.com/foo
+        tag: latest-gpu
 
     - uses: ./.github/actions/publish-docker
       with:
-        repository: foo
+        repository: example.com/foo
         target: devel
