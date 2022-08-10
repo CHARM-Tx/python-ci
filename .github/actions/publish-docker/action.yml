@@ -1,0 +1,62 @@
+name: "Set up repo"
+description: |
+  Check out repo and configure required secrets
+inputs:
+  repository:
+    description: Repository to push to
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: Set up Docker
+      uses: docker/setup-buildx-action@v2
+
+    - name: Build devel tags
+      id: devel_tags
+      uses: docker/metadata-action@v4
+      with:
+        images: ${{ inputs.repository }}
+        flavor: |
+          latest=false
+          suffix=-devel
+        tags: |
+          type=ref,event=branch,prefix=github-ref-
+          type=sha,format=long,prefix=github-sha-
+          type=raw,enable=${{ github.ref == 'refs/heads/master' }},value=latest-gpu
+          type=raw,enable=${{ github.ref == 'refs/heads/master' }},value={{ date 'YYY-MM-DD' }}
+
+    - name: Push devel
+      uses: docker/build-push-action@v3
+      with:
+        context: .
+        file: ./docker/Dockerfile
+        ssh: default
+        target: devel
+        tags: ${{ steps.devel_tags.outputs.tags }}
+        push: true
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+
+    - name: Build tags
+      id: tags
+      uses: docker/metadata-action@v4
+      with:
+        images: ${{ inputs.repository }}
+        flavor: |
+          latest=false
+        tags: |
+          type=ref,event=branch,prefix=github-ref-
+          type=sha,format=long,prefix=github-sha-
+          type=raw,enable=${{ github.ref == 'refs/heads/master' }},value=latest-gpu
+          type=raw,enable=${{ github.ref == 'refs/heads/master' }},value={{ date 'YYY-MM-DD' }}
+
+    - name: Push
+      uses: docker/build-push-action@v3
+      with:
+        context: .
+        file: ./docker/Dockerfile
+        ssh: default
+        tags: ${{ steps.tags.outputs.tags }}
+        push: true
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
