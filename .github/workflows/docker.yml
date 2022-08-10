@@ -1,0 +1,33 @@
+name: Publish docker image
+
+on:
+  push:
+    branches:
+      - master
+      - main
+      - "*/build/docker/*"
+    tags:
+      - "v*"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Docker
+      uses: docker/setup-buildx-action@v2
+
+    - uses: ./.github/actions/publish-docker
+      with:
+        repository: foo
+
+    - uses: ./.github/actions/publish-docker
+      with:
+        repository: foo
+        tags: latest-gpu
+
+    - uses: ./.github/actions/publish-docker
+      with:
+        repository: foo
+        target: devel
