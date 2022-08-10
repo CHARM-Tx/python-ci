@@ -35,7 +35,7 @@ runs:
           type=ref,event=branch,prefix=github-ref-
           type=sha,format=long,prefix=github-sha-
           type=raw,enable=${{ inputs.publish_tags }},value=${{ inputs.tag }}
-          type=raw,enable=${{ inputs.publish_tags }},value={{ date 'YYY-MM-DD' }}
+          type=raw,enable=${{ inputs.publish_tags }},value={{ date 'YYYY-MM-DD' }}
 
     - name: Build & push image
       uses: docker/build-push-action@v3
