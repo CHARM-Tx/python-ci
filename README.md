@@ -30,3 +30,6 @@ addopts = --cov=$your_package
 conda create -n python-ci --file environment.lock python=3.9
 pip install -e .[tests]
 ```
+
+If you update any of `lint/mypy/test` it's probably worth also updating the relevant
+section in `python-release`.
