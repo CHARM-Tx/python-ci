@@ -58,7 +58,9 @@ jobs:
         aws codeartifact login --tool twine --repository charm-pypi --domain charm-pypi \
         --domain-owner 455661021047 --region eu-west-1
 
-    - name: Build and publish
-      run: |
-        python -m build
-#        twine upload --repository-url $REPO_URL dist/*
+    - name: Build
+      run: python -m build
+
+    - name: Publish
+      if: github.event.push
+      run: twine upload --repository-url $REPO_URL dist/*

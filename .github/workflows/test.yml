@@ -1,7 +1,6 @@
 name: Unit Testing
 
 on:
-  pull_request: {}
   workflow_call:
     secrets:
       AWS_ACCESS_KEY_ID:
