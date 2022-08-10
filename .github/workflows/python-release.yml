@@ -10,6 +10,7 @@ on:
   push:
     tags:
     - 'v*'
+  pull_request: {}
 
 jobs:
   lint:
@@ -41,4 +42,4 @@ jobs:
     - name: Build and publish
       run: |
         python setup.py sdist bdist_wheel
-        twine upload --repository-url $REPO_URL dist/*
+#        twine upload --repository-url $REPO_URL dist/*
