@@ -14,9 +14,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-
-    - name: Set up Docker
-      uses: docker/setup-buildx-action@v2
+    # We don't need any keys, but the docker action expects an SSH agent to be
+    # up, and the action requires at least one private key. Once we migrate to
+    # using artifacts for internal dependencies, we can remove this.
+    - uses: webfactory/ssh-agent@v0.5.4
+      with:
+        ssh-private-key: |
+          ${{ secrets.MLUTILS_DEPLOY_KEY }}
+    - uses: docker/setup-buildx-action@v2
 
     - uses: ./.github/actions/publish-docker
       with:
