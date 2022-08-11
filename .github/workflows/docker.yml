@@ -1,0 +1,44 @@
+name: Publish docker image
+
+on:
+  push:
+    tags:
+    - 'v*'
+  pull_request: {}
+
+jobs:
+  docker-publish:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    # We don't need any keys, but the docker action expects an SSH agent to be
+    # up, and the action requires at least one private key. Once we migrate to
+    # using artifacts for internal dependencies, we can remove this.
+    - uses: webfactory/ssh-agent@v0.5.4
+      with:
+        ssh-private-key: |
+          ${{ secrets.MLUTILS_DEPLOY_KEY }}
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: eu-central-1
+
+    - name: Login to Amazon ECR
+      id: login
+      uses: aws-actions/amazon-ecr-login@v1
+
+    - uses: docker/setup-buildx-action@v2
+
+    - uses: ./.github/actions/publish-docker
+      with:
+        repository: 455661021047.dkr.ecr.eu-central-1.amazonaws.com/python-ci
+        publish_tags: "${{ github.ref == 'refs/heads/main' }}"
+
+    - uses: ./.github/actions/publish-docker
+      with:
+        repository: 455661021047.dkr.ecr.eu-central-1.amazonaws.com/python-ci
+        target: test
+        publish_tags: "${{ github.ref == 'refs/heads/main' }}"
