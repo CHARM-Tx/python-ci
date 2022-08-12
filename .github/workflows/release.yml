@@ -6,9 +6,6 @@ name: Upload Python Package
 on:
   workflow_call:
     inputs:
-      github_ref:
-        required: true
-        type: string
       github_tag:
         required: true
         type: string
@@ -50,13 +47,9 @@ jobs:
         aws codeartifact login --tool twine --repository charm-pypi --domain charm-pypi \
         --domain-owner ${{ secrets.AWS_ACCOUNT_ID }} --region eu-west-1
 
-    - name: Update tag
-      run: git tag ${{ inputs.github_tag }}
-      if: startsWith(${{ inputs.github_ref }}, 'refs/tags/v')
-
     - name: Build
       run: python -m build
 
     - name: Publish
-      if: startsWith(${{ inputs.github_ref }}, 'refs/tags/v')
+      if: startsWith(${{ inputs.github_tag }}, 'v')
       run: twine upload --repository codeartifact dist/*
