@@ -18,6 +18,9 @@ jobs:
 
   mypy:
     uses: ./.github/workflows/mypy.yml
+    with:
+      python_versions: '["3.9"]'
+      environment_file: environment.lock
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -25,6 +28,9 @@ jobs:
 
   test:
     uses: ./.github/workflows/test.yml
+    with:
+      python_versions: '["3.9"]'
+      environment_file: environment.lock
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

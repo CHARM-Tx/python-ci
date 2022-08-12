@@ -2,6 +2,17 @@ name: Python Type Checking
 
 on:
   workflow_call:
+    inputs:
+      environment_file:
+        description: filename of conda env file
+        required: false
+        type: string
+        default: environment.yml
+      python_versions:
+        description: string containing a JSON array of versions
+        required: false
+        type: string
+        default: '["3.9"]'
     secrets:
       AWS_ACCESS_KEY_ID:
         required: true
@@ -17,6 +28,11 @@ jobs:
   python-mypy:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ${{ fromJson(inputs.python_versions) }}
 
     defaults:
       run:
@@ -50,9 +66,8 @@ jobs:
         with:
           cache-downloads: true
           cache-downloads-key: "mamba-${{ hashFiles('environment.lock') }}"
-          # to generate environment.lock run, see docker/update-reqs.sh
-          environment-file: environment.lock
-          environment-name: bindgen
+          environment-file: ${{ inputs.environment_file }}
+          environment-name: typecheck
 
       - name: Cache pip downloads
         uses: actions/cache@v3

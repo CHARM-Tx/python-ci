@@ -2,12 +2,25 @@ name: Unit Testing
 
 on:
   workflow_call:
+    inputs:
+      environment_file:
+        description: filename of conda env file
+        required: false
+        type: string
+        default: environment.yml
+      python_versions:
+        description: string containing a JSON array of versions
+        required: false
+        type: string
+        default: '["3.9"]'
     secrets:
       AWS_ACCESS_KEY_ID:
         required: true
       AWS_SECRET_ACCESS_KEY:
         required: true
       MLUTILS_DEPLOY_KEY:
+        required: true
+      AWS_ACCOUNT_ID:
         required: true
 
 jobs:
@@ -20,6 +33,11 @@ jobs:
       run:
         shell: bash -l {0}
 
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ${{ fromJson(inputs.python_versions) }}
+
     steps:
     - uses: actions/checkout@v2
 
@@ -29,8 +47,7 @@ jobs:
       with:
         cache-downloads: true
         cache-downloads-key: "mamba-${{ hashFiles('environment.lock') }}"
-        # to generate environment.lock run, see docker/update-reqs.sh
-        environment-file: environment.lock
+        environment-file: ${{ inputs.environment_file }}
         environment-name: unit-testing
         extra-specs:
           python=3.9
