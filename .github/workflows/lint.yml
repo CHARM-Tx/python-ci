@@ -1,6 +1,12 @@
 name: Python Lint
 
-on: [workflow_call]
+on: 
+  workflow_call:
+    inputs:
+      flake8_plugins:
+        type: string
+        description: space-delimited list of flake8 plugins to install
+        required: false
 
 jobs:
   python-lint:
@@ -20,5 +26,5 @@ jobs:
           isortVersion: "5.10.1"
       - name: Run flake8
         run: |
-          pip install flake8 flake8-simplify flake8-comprehensions flake8-bugbear darglint flake8-pep585
+          pip install flake8 ${{ inputs.flake8_plugins }}
           python -m flake8 .

@@ -1,0 +1,42 @@
+# This workflow will upload a Python Package using Twine when a release is created
+# For more information see: https://help.github.com/en/actions/language-and-framework-guides/using-python-with-github-actions#publishing-to-package-registries
+
+# This workflow cannot be called, as it calls out to other workflows.
+# You can use it as a model for your own repo.
+
+name: Run full workflow
+
+on:
+  push:
+    tags:
+    - 'v*'
+  pull_request: {}
+
+jobs:
+  lint:
+    uses: ./.github/workflows/lint.yml
+
+  mypy:
+    uses: ./.github/workflows/mypy.yml
+    secrets:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      MLUTILS_DEPLOY_KEY: ${{ secrets.MLUTILS_DEPLOY_KEY }}
+
+  test:
+    uses: ./.github/workflows/test.yml
+    secrets:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      MLUTILS_DEPLOY_KEY: ${{ secrets.MLUTILS_DEPLOY_KEY }}
+
+  release:
+    uses: ./.github/workflows/release.yml
+    with:
+      # When called from another repo, this pipeline would use
+      # the tag from python-ci, not the caller
+      github_ref: ${GITHUB_REF}
+    secrets:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      MLUTILS_DEPLOY_KEY: ${{ secrets.MLUTILS_DEPLOY_KEY }}

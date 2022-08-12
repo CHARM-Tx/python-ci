@@ -54,7 +54,7 @@ jobs:
     - name: Log in to AWS CodeArtifact
       run: |
         aws codeartifact login --tool pip --repository charm-pypi --domain charm-pypi \
-        --domain-owner 455661021047 --region eu-west-1
+        --domain-owner ${{ secrets.AWS_ACCOUNT_ID }} --region eu-west-1
 
     - name: Install package
       run: |
