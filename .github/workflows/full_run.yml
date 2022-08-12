@@ -44,6 +44,7 @@ jobs:
       # When called from another repo, this pipeline would use
       # the tag from python-ci, not the caller
       github_ref: ${GITHUB_REF}
+      github_tag: ${{ github.ref_name }}
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
