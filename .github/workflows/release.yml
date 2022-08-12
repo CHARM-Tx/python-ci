@@ -52,6 +52,7 @@ jobs:
 
     - name: Update tag
       run: git tag ${{ inputs.github_tag }}
+      if: startsWith(${{ inputs.github_ref }}, 'refs/tags/v')
 
     - name: Build
       run: python -m build
