@@ -11,12 +11,6 @@ A repository for generally useful Python CI workflows
     - Test dependencies via `extra_requires`
     - The following sections:
 
-Once you've done all that, you should be able to call these like you would any action:
-
-`uses: CHARM-Tx/python-ci/workflows/lint.yml`
-
-See `python-release.yml` for an example of calling these workflows in a reusable way.
-
 ```conf
 [mypy]
 python_version = $your_version
@@ -25,6 +19,19 @@ files = $your_package
 [tool:pytest]
 addopts = --cov=$your_package
 ```
+
+Once you've done all that, you should be able to call these like you would any action:
+
+`uses: CHARM-Tx/python-ci/workflows/lint.yml`
+
+See `full_run.yml` for an example of calling these workflows in a reusable way.
+
+Note that instead of `uses: ./.github...` you'll have to use `CHARM-Tx/python-ci/.github...@$version`
+
+Where `$version` is the latest version at the time you're writing your CI. You could use `main`
+but this runs the risk that changes to the CI repo will break your workflow.
+
+See the `.yml` files in `.github/workflows` for alternative call arguments.
 
 ## Local Development Environment
 

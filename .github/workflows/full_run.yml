@@ -1,0 +1,35 @@
+# This workflow will upload a Python Package using Twine when a release is created
+# For more information see: https://help.github.com/en/actions/language-and-framework-guides/using-python-with-github-actions#publishing-to-package-registries
+
+# This workflow cannot be called, as it calls out to other workflows.
+# You can use it as a model for your own repo.
+
+name: Run full workflow
+
+on:
+  push:
+    tags:
+    - 'v*'
+  pull_request: {}
+
+jobs:
+  lint:
+    uses: ./.github/workflows/lint.yml
+
+  mypy:
+    uses: ./.github/workflows/mypy.yml
+    with:
+      python_versions: '["3.9"]'
+      environment_file: environment.lock
+    secrets: inherit
+
+  test:
+    uses: ./.github/workflows/test.yml
+    with:
+      python_versions: '["3.9"]'
+      environment_file: environment.lock
+    secrets: inherit
+
+  release:
+    uses: ./.github/workflows/release.yml
+    secrets: inherit

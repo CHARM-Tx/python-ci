@@ -1,16 +1,9 @@
 # This workflow will upload a Python Package using Twine when a release is created
 # For more information see: https://help.github.com/en/actions/language-and-framework-guides/using-python-with-github-actions#publishing-to-package-registries
 
-# There's a lot of duplication here, but no great alternatives:
-# https://stackoverflow.com/q/58457140
-
 name: Upload Python Package
 
 on:
-  push:
-    tags:
-    - 'v*'
-  pull_request: {}
   workflow_call:
     secrets:
       AWS_ACCESS_KEY_ID:
@@ -19,29 +12,13 @@ on:
         required: true
       MLUTILS_DEPLOY_KEY:
         required: true
+      AWS_ACCOUNT_ID:
+        required: true
 
 jobs:
-  lint:
-    uses: ./.github/workflows/lint.yml
-
-  mypy:
-    uses: ./.github/workflows/mypy.yml
-    secrets:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      MLUTILS_DEPLOY_KEY: ${{ secrets.MLUTILS_DEPLOY_KEY }}
-
-  test:
-    uses: ./.github/workflows/test.yml
-    secrets:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      MLUTILS_DEPLOY_KEY: ${{ secrets.MLUTILS_DEPLOY_KEY }}
-
   deploy:
     runs-on: ubuntu-latest
     timeout-minutes: 2
-    needs: [lint, mypy, test]
     steps:
     - uses: actions/checkout@v2
 
@@ -64,11 +41,12 @@ jobs:
     - name: Log into AWS CodeArtifact
       run: | 
         aws codeartifact login --tool twine --repository charm-pypi --domain charm-pypi \
-        --domain-owner 455661021047 --region eu-west-1
+        --domain-owner ${{ secrets.AWS_ACCOUNT_ID }} --region eu-west-1
 
     - name: Build
       run: python -m build
 
+# We only run a publish if this CI is running after a tag/release.
     - name: Publish
       if: startsWith(github.ref, 'refs/tags/v')
       run: twine upload --repository codeartifact dist/*
