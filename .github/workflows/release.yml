@@ -46,6 +46,7 @@ jobs:
     - name: Build
       run: python -m build
 
+# We only run a publish if this CI is running after a tag/release.
     - name: Publish
       if: startsWith(github.ref, 'refs/tags/v')
       run: twine upload --repository codeartifact dist/*

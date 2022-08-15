@@ -15,7 +15,12 @@ Once you've done all that, you should be able to call these like you would any a
 
 `uses: CHARM-Tx/python-ci/workflows/lint.yml`
 
-See `python-release.yml` for an example of calling these workflows in a reusable way.
+See `full_run.yml` for an example of calling these workflows in a reusable way.
+
+Note that instead of `uses: ./.github...` you'll have to use `CHARM-Tx/python-ci/.github...@$version`
+
+Where `$version` is the latest version at the time you're writing your CI. You could use `main`
+but this runs the risk that changes to the CI repo will break your workflow.
 
 ```conf
 [mypy]
