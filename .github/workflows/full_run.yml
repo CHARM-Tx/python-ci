@@ -21,31 +21,15 @@ jobs:
     with:
       python_versions: '["3.9"]'
       environment_file: environment.lock
-    secrets:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      MLUTILS_DEPLOY_KEY: ${{ secrets.MLUTILS_DEPLOY_KEY }}
-      AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+    secrets: inherit
 
   test:
     uses: ./.github/workflows/test.yml
     with:
       python_versions: '["3.9"]'
       environment_file: environment.lock
-    secrets:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      MLUTILS_DEPLOY_KEY: ${{ secrets.MLUTILS_DEPLOY_KEY }}
-      AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+    secrets: inherit
 
   release:
     uses: ./.github/workflows/release.yml
-    with:
-      # When called from another repo, this pipeline would use
-      # the tag from python-ci, not the caller
-      github_tag: ${{ github.ref_name }}
-    secrets:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      MLUTILS_DEPLOY_KEY: ${{ secrets.MLUTILS_DEPLOY_KEY }}
-      AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+    secrets: inherit
