@@ -8,6 +8,14 @@ on:
         required: false
         type: string
         default: environment.yml
+      requirements_file:
+        description: filename of requirements.txt file, if frozen dependencies are desired
+        type: string
+        required: false
+      extra_index_urls:
+        description: additional index URLs, comma-separated, to use when pip installing
+        type: string
+        required: false
       python_versions:
         description: string containing a JSON array of versions
         required: false
@@ -88,9 +96,16 @@ jobs:
           aws codeartifact login --tool pip --repository charm-pypi --domain charm-pypi \
           --domain-owner ${{ secrets.AWS_ACCOUNT_ID }} --region eu-west-1
 
+      - name: Extra Index URLs
+        run: export EXTRA_INDEX_URL=${{ inputs.extra_index_url }}
+
       - name: Install package
-        run: |
-          python -m pip install .[tests]
+        run: python -m pip install .[tests]
+        if: ${{ !inputs.requirements_file }}
+
+      - name: Install from requirements file
+        run: python -m pip install --no-deps -r ${{ inputs.requirements_file }}
+        if: ${{ inputs.requirements_file }}
 
       - name: Mypy Type Install
         run: python -m mypy --install-types --non-interactive
