@@ -13,6 +13,11 @@ on:
         required: false
         type: string
         default: '["3.9"]'
+      install_types:
+        description: whether to use mypy to install type stubs
+        required: false
+        type: boolean
+        default: true
     secrets:
       AWS_ACCESS_KEY_ID:
         required: true
@@ -87,7 +92,9 @@ jobs:
         run: |
           python -m pip install .[tests]
 
+      - name: Mypy Type Install
+        run: python -m mypy --install-types --non-interactive
+        if: ${{ inputs.install_types }}
+
       - name: Mypy
-        run: |
-          python -m mypy --install-types --non-interactive
-          python -m mypy
+        run: python -m mypy
