@@ -69,12 +69,14 @@ jobs:
       - name: Upload to s3 (dry run)
         run: |
           VERSION=${{ github.ref_name }}
-          echo $VERSION
+          echo "Version: $VERSION"
           aws s3 sync --dryrun html_docs/ s3://charmtx-python-doc/${{inputs.module_name}}/${VERSION}/
+          aws s3 sync --dryrun html_docs/ s3://charmtx-python-doc/${{inputs.module_name}}/latest/
 
       - name: Upload to s3
         run: |
           VERSION=${{ github.ref_name }}
-          echo $VERSION
+          echo "Version: $VERSION"
           aws s3 sync html_docs/ s3://charmtx-python-doc/${{inputs.module_name}}/${VERSION}/
+          aws s3 sync html_docs/ s3://charmtx-python-doc/${{inputs.module_name}}/latest/
         if: startsWith(github.ref, 'refs/tags/v')
