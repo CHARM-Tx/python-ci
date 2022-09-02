@@ -35,10 +35,8 @@ jobs:
       - name: Set up micromamba
         uses: mamba-org/provision-with-micromamba@5fe88d370c741fc3567126d17c5af0b9620bd60d
         with:
-          cache-downloads: true
-          cache-downloads-key: "mamba-${{ hashFiles(inputs.environment_file) }}"
           environment-file: ${{ inputs.environment_file }}
-          environment-name: typecheck
+          environment-name: document
 
       - name: Cache pip downloads
         uses: actions/cache@v3
