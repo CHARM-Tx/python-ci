@@ -72,7 +72,7 @@ jobs:
           echo $VERSION
           aws s3 sync --dryrun html_docs/ s3://charmtx-python-doc/${{inputs.module_name}}/${VERSION}/
 
-      - name: Upload to s3 (dry run)
+      - name: Upload to s3
         run: |
           VERSION=${{ github.ref_name }}
           echo $VERSION
