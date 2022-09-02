@@ -35,6 +35,8 @@ jobs:
       - name: Set up micromamba
         uses: mamba-org/provision-with-micromamba@5fe88d370c741fc3567126d17c5af0b9620bd60d
         with:
+          cache-downloads: true
+          cache-downloads-key: "mamba-${{ hashFiles('environment.lock') }}"
           environment-file: ${{ inputs.environment_file }}
           environment-name: document
 
@@ -54,8 +56,6 @@ jobs:
 
       - name: Install package
         run: python -m pip install .[tests]
-
-      - run: python -m pip install pdoc
 
       - name: Generate documentation
         run: python -m pdoc ${{ inputs.module_name }} --docformat google --output-directory html_docs
