@@ -82,7 +82,7 @@ jobs:
           environment-file: ${{ inputs.environment_file }}
           environment-name: typecheck
           extra-specs: |
-            python={{ $inputs.python-version }}
+            python=${{ matrix.python-version }}
 
       - name: Cache pip downloads
         uses: actions/cache@v3
