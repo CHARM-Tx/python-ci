@@ -66,12 +66,10 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: eu-central-1
 
-      # Setup SSH keys to clone private repos
-      - name: Set up SSH agent
-        uses: webfactory/ssh-agent@v0.5.4
-        with:
-          ssh-private-key: |
-            ${{ secrets.MLUTILS_DEPLOY_KEY }}
+      - name: Log in to AWS CodeArtifact
+        run: |
+          aws codeartifact login --tool pip --repository charm-pypi --domain charm-pypi \
+          --domain-owner ${{ secrets.AWS_ACCOUNT_ID }} --region eu-west-1
 
       # Configure conda
       - name: Set up micromamba
@@ -92,11 +90,6 @@ jobs:
           restore-keys: |
             pip-${{ hashFiles('setup.cfg') }}
             pip-
-
-      - name: Log in to AWS CodeArtifact
-        run: |
-          aws codeartifact login --tool pip --repository charm-pypi --domain charm-pypi \
-          --domain-owner ${{ secrets.AWS_ACCOUNT_ID }} --region eu-west-1
 
       - name: Extra Index URLs
         run: export EXTRA_INDEX_URL=${{ inputs.extra_index_url }}
