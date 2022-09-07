@@ -31,6 +31,8 @@ on:
         required: true
       AWS_SECRET_ACCESS_KEY:
         required: true
+      CHEMUTILS_DEPLOY_KEY:
+        required: true
       MLUTILS_DEPLOY_KEY:
         required: true
       AWS_ACCOUNT_ID:

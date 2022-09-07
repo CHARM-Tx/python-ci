@@ -17,6 +17,7 @@ jobs:
     - uses: webfactory/ssh-agent@v0.5.4
       with:
         ssh-private-key: |
+          ${{ secrets.CHEMUTILS_DEPLOY_KEY }}
           ${{ secrets.MLUTILS_DEPLOY_KEY }}
 
     - name: Configure AWS credentials
