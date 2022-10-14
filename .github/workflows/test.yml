@@ -49,18 +49,6 @@ jobs:
     - name: Install apt packages
       run: sudo apt-get install --yes ${{ inputs.apt_packages }}
 
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: eu-central-1
-
-    - name: Log in to AWS CodeArtifact
-      run: |
-        aws codeartifact login --tool pip --repository charm-pypi --domain charm-pypi \
-        --domain-owner ${{ secrets.AWS_ACCOUNT_ID }} --region eu-west-1
-
     # Configure conda
     - name: Set up micromamba
       uses: mamba-org/provision-with-micromamba@5fe88d370c741fc3567126d17c5af0b9620bd60d
@@ -80,6 +68,18 @@ jobs:
         restore-keys: |
           pip-${{ hashFiles('setup.cfg') }}
           pip-
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: eu-central-1
+
+    - name: Log in to AWS CodeArtifact
+      run: |
+        aws codeartifact login --tool pip --repository charm-pypi --domain charm-pypi \
+        --domain-owner ${{ secrets.AWS_ACCOUNT_ID }} --region eu-west-1
 
     - name: Install package
       run: |
