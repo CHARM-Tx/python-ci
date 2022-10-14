@@ -18,8 +18,8 @@ on:
         required: false
         type: string
         default: ''
-      extra_index_urls:
-        description: a space-separated list of extra index URLs
+      find_links:
+        description: a space-separated list to set as PIP_FIND_LINKS
         required: false
         type: string
         default: ''
@@ -88,9 +88,9 @@ jobs:
 
     - name: Install package
       env:
-        PIP_EXTRA_INDEX_URL: ${{ inputs.extra_index_urls }}
+        PIP_FIND_LINKS: ${{ inputs.find_links }}
       run: |
-        python -m pip install .[tests]
+        python -m pip install --prefer-binary .[tests]
 
     - name: Test with pytest
       run: |
