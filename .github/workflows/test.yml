@@ -18,8 +18,8 @@ on:
         required: false
         type: string
         default: ''
-      find_links:
-        description: a space-separated list to set as PIP_FIND_LINKS
+      pip_install_args:
+        description: args to pass to pip install
         required: false
         type: string
         default: ''
@@ -87,10 +87,8 @@ jobs:
         --domain-owner ${{ secrets.AWS_ACCOUNT_ID }} --region eu-west-1
 
     - name: Install package
-      env:
-        PIP_FIND_LINKS: ${{ inputs.find_links }}
       run: |
-        python -m pip install --prefer-binary .[tests]
+        python -m pip install ${{ inputs.pip_install_args }} .[tests]
 
     - name: Test with pytest
       run: |
