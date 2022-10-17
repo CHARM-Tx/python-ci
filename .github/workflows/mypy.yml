@@ -26,6 +26,11 @@ on:
         required: false
         type: boolean
         default: true
+      pip_install_args:
+        description: args to pass to pip install
+        required: false
+        type: string
+        default: ''
     secrets:
       AWS_ACCESS_KEY_ID:
         required: true
@@ -102,11 +107,11 @@ jobs:
         run: export EXTRA_INDEX_URL=${{ inputs.extra_index_url }}
 
       - name: Install package
-        run: python -m pip install .[tests]
+        run: python -m pip install ${{ inputs.pip_install_args }} .[tests]
         if: ${{ !inputs.requirements_file }}
 
       - name: Install from requirements file
-        run: python -m pip install --no-deps -r ${{ inputs.requirements_file }}
+        run: python -m pip install --no-deps ${{ inputs.pip_install_args }} -r ${{ inputs.requirements_file }}
         if: ${{ inputs.requirements_file }}
 
       - name: Mypy Type Install
