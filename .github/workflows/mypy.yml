@@ -89,7 +89,7 @@ jobs:
         with:
           cache-downloads: true
           cache-downloads-key: "mamba-${{ hashFiles(inputs.environment_file) }}"
-          environment-file: ${{ inputs.environment_file }}
+          environment-file: ${{ inputs.path }}/${{ inputs.environment_file }}
           environment-name: typecheck
           extra-specs: |
             python=${{ matrix.python-version }}
