@@ -50,11 +50,11 @@ jobs:
         --domain-owner ${{ secrets.AWS_ACCOUNT_ID }} --region eu-west-1
 
     - name: Build
-      working-directory: ${{ inputs.path }}
+      working-directory: ./${{ inputs.path }}
       run: python -m build
 
 # We only run a publish if this CI is running after a tag/release.
     - name: Publish
-      working-directory: ${{ inputs.path }}
+      working-directory: ./${{ inputs.path }}
       if: startsWith(github.ref, 'refs/tags/v')
       run: twine upload --repository codeartifact dist/*

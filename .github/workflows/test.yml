@@ -65,7 +65,7 @@ jobs:
       with:
         cache-downloads: true
         cache-downloads-key: "mamba-${{ hashFiles(inputs.environment_file) }}"
-        environment-file: ${{ inputs.path }}/${{ inputs.environment_file }}
+        environment-file: ./${{ inputs.path }}/${{ inputs.environment_file }}
         environment-name: unit-testing
         extra-specs:
           python=${{ matrix.python-version }}
@@ -92,19 +92,19 @@ jobs:
         --domain-owner ${{ secrets.AWS_ACCOUNT_ID }} --region eu-west-1
 
     - name: Install package
-      working-directory: ${{ inputs.path }}
+      working-directory: ./${{ inputs.path }}
       run: |
         python -m pip install ${{ inputs.pip_install_args }} .[tests]
 
     - name: Test with pytest
-      working-directory: ${{ inputs.path }}
+      working-directory: ./${{ inputs.path }}
       run: |
         python -m pytest --cov-report=xml
 
     - name: Code Coverage
       uses: irongut/CodeCoverageSummary@v1.3.0
       with:
-        filename: ${{ inputs.path }}/coverage.xml
+        filename: ./${{ inputs.path }}/coverage.xml
         badge: true
         format: markdown
         hide_branch_rate: false

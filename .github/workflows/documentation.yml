@@ -48,7 +48,7 @@ jobs:
         with:
           cache-downloads: true
           cache-downloads-key: "mamba-${{ hashFiles(inputs.environment_file) }}"
-          environment-file: ${{ inputs.path }}/${{ inputs.environment_file }}
+          environment-file: ./${{ inputs.path }}/${{ inputs.environment_file }}
           environment-name: document
 
       - name: Cache pip downloads
@@ -66,15 +66,15 @@ jobs:
           --domain-owner ${{ secrets.AWS_ACCOUNT_ID }} --region eu-west-1
 
       - name: Install package
-        working-directory: ${{ inputs.path }}
+        working-directory: ./${{ inputs.path }}
         run: python -m pip install .[tests]
 
       - name: Generate documentation
-        working-directory: ${{ inputs.path }}
+        working-directory: ./${{ inputs.path }}
         run: python -m pdoc ${{ inputs.module_name }} --docformat google --output-directory html_docs
 
       - name: Upload to s3 (dry run)
-        working-directory: ${{ inputs.path }}
+        working-directory: ./${{ inputs.path }}
         run: |
           VERSION=${{ github.ref_name }}
           echo "Version: $VERSION"
@@ -82,7 +82,7 @@ jobs:
           aws s3 sync --dryrun html_docs/ s3://charmtx-python-doc/${{inputs.module_name}}/latest/
 
       - name: Upload to s3
-        working-directory: ${{ inputs.path }}
+        working-directory: ./${{ inputs.path }}
         run: |
           VERSION=${{ github.ref_name }}
           echo "Version: $VERSION"

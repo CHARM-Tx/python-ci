@@ -24,13 +24,13 @@ jobs:
           python-version: '3.9'
       - uses: psf/black@22.1.0
         with:
-          src: ${{ inputs.path }}
+          src: ./${{ inputs.path }}
       - uses: isort/isort-action@master
         with:
-          sortPaths: ${{ inputs.path }}
+          sortPaths: ./${{ inputs.path }}
           isortVersion: "5.10.1"
       - name: Run flake8
-        working-directory: ${{ inputs.path }}
+        working-directory: ./${{ inputs.path }}
         run: |
           pip install flake8 ${{ inputs.flake8_plugins }}
           python -m flake8
