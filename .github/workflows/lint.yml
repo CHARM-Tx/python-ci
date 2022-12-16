@@ -33,4 +33,4 @@ jobs:
         working-directory: ./${{ inputs.path }}
         run: |
           pip install flake8 ${{ inputs.flake8_plugins }}
-          python -m flake8
+          python -m flake8 .
