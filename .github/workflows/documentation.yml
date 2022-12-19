@@ -44,7 +44,7 @@ jobs:
 
       # Configure conda
       - name: Set up micromamba
-        if: ${{ inputs.environment_file }}
+        if: ${{ inputs.environment_file != '' }}
         uses: mamba-org/provision-with-micromamba@5fe88d370c741fc3567126d17c5af0b9620bd60d
         with:
           cache-downloads: true
