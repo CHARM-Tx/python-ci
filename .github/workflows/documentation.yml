@@ -17,6 +17,11 @@ on:
         description: Path of package, relative to the repo root
         required: false
         default: '.'
+      python_version:
+        description: Version of python to use if an environment file is not provided
+        required: false
+        type: string
+        default: '3.9'
 
 jobs:
   generate-docs:
@@ -51,6 +56,18 @@ jobs:
           cache-downloads-key: "mamba-${{ hashFiles(inputs.environment_file) }}"
           environment-file: ./${{ inputs.path }}/${{ inputs.environment_file }}
           environment-name: document
+
+      # Configure conda
+      - name: Set up micromamba
+        if: ${{ inputs.environment_file == '' }}
+        uses: mamba-org/provision-with-micromamba@5fe88d370c741fc3567126d17c5af0b9620bd60d
+        with:
+          cache-downloads: true
+          cache-downloads-key: "mamba-${{ hashFiles(inputs.environment_file) }}"
+          environment-file: false
+          environment-name: document
+          extra-specs: |
+            python=${{ inputs.python_version }}
 
       - name: Cache pip downloads
         uses: actions/cache@v3

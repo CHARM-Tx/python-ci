@@ -59,7 +59,7 @@ jobs:
     - name: Install apt packages
       run: sudo apt-get install --yes ${{ inputs.apt_packages }}
 
-    # Configure conda
+    # Configure conda if an environment file is provided
     - name: Set up micromamba
       if: ${{ inputs.environment_file != '' }}
       uses: mamba-org/provision-with-micromamba@5fe88d370c741fc3567126d17c5af0b9620bd60d
@@ -68,7 +68,19 @@ jobs:
         cache-downloads-key: "mamba-${{ hashFiles(inputs.environment_file) }}"
         environment-file: ./${{ inputs.path }}/${{ inputs.environment_file }}
         environment-name: unit-testing
-        extra-specs:
+        extra-specs: |
+          python=${{ matrix.python-version }}
+
+    # Configure conda if an environment file is not provided
+    - name: Set up micromamba
+      if: ${{ inputs.environment_file == '' }}
+      uses: mamba-org/provision-with-micromamba@5fe88d370c741fc3567126d17c5af0b9620bd60d
+      with:
+        cache-downloads: true
+        cache-downloads-key: "mamba-${{ hashFiles(inputs.environment_file) }}"
+        environment-file: false
+        environment-name: unit-testing
+        extra-specs: |
           python=${{ matrix.python-version }}
 
     - name: Cache pip downloads
