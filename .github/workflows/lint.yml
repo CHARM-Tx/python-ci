@@ -7,6 +7,11 @@ on:
         type: string
         description: space-delimited list of flake8 plugins to install
         required: false
+      path:
+        type: string
+        description: Path of package, relative to the repo root
+        required: false
+        default: '.'
 
 jobs:
   python-lint:
@@ -19,12 +24,13 @@ jobs:
           python-version: '3.9'
       - uses: psf/black@22.1.0
         with:
-          src: "."
+          src: ./${{ inputs.path }}
       - uses: isort/isort-action@master
         with:
-          sortPaths: "."
+          sortPaths: ./${{ inputs.path }}
           isortVersion: "5.10.1"
       - name: Run flake8
+        working-directory: ./${{ inputs.path }}
         run: |
           pip install flake8 ${{ inputs.flake8_plugins }}
           python -m flake8 .
