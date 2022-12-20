@@ -117,7 +117,7 @@ jobs:
     - uses: actions/upload-artifact@v2
       with:
         name: coverage
-        path: ./${{ inputs.path }}/coverage.xml
+        path: coverage.xml
 
     - name: Code Coverage
       uses: irongut/CodeCoverageSummary@v1.3.0
