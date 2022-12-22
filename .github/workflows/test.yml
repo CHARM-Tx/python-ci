@@ -125,3 +125,8 @@ jobs:
         indicators: true
         output: both
         thresholds: '80 100'
+    
+    - uses: actions/upload-artifact@v2
+      with:
+        name: coverage
+        path: coverage.xml
